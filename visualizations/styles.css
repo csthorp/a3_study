@@ -1,0 +1,18 @@
+body {
+  font-family: "Optima," sans-serif;
+  background: #f5f5f5;     /* Light gray background behind SVG */
+  padding: 20px;           /* Adds spacing around the page content */
+  font-weight: 500;
+  font-size: larger;
+}
+
+svg {
+  background: white;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc;
+  display: block;
+  margin: 20px auto;
+  padding: 50px;
+  font-size: smaller;
+}
