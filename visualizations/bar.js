@@ -1,59 +1,64 @@
-/* -------------------- DATA (unique heights) --------------------
-var dataset = [];
-var used = new Set();
+// Data is now [label, value]
+// var dataset = [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]];
+// var dataset = [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]];
+var dataset = [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]];
 
-while (dataset.length < 6) {
-  var v = Math.floor(Math.random() * 10) + 1; // 1..18
-  if (!used.has(v)) {
-    used.add(v);
-    dataset.push(v);
-  }
-}*/
-
-var dataset=[5, 8, 10, 7, 2, 4];
 
 // -------------------- DIMENSIONS --------------------
-var w = 500, h = 300;
-var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+var w = 600, h = 400;
+var margin = { top: 20, right: 20, bottom: 45, left: 55 }; // more room for axes/labels
 var innerW = w - margin.left - margin.right;
 var innerH = h - margin.top - margin.bottom;
 
+// bar spacing
 var strokeW = 1;
-var gap = 3;
-var slot = innerW / dataset.length;
-var barW = slot - gap;
+var gap = 10; // bigger gap so bars are clearly spaced
 
-// -------------------- INDICES FOR SYMBOLS --------------------
-var maxValue = d3.max(dataset);
-var maxIndex = dataset.indexOf(maxValue);
+// -------------------- HELPERS: pull labels/values --------------------
+var labels = dataset.map(d => d[0]);
+var values = dataset.map(d => d[1]);
 
-var randomIndex;
-do {
-  randomIndex = Math.floor(Math.random() * dataset.length);
-} while (randomIndex === maxIndex);
+// max/min indices (by VALUE)
+var maxValue = d3.max(values);
+var maxIndex = values.indexOf(maxValue);
+
+var minValue = d3.min(values);
+var minIndex = values.indexOf(minValue);
 
 // -------------------- SCALES --------------------
+// x: band scale for spacing + A/B/C labels
+var xScale = d3.scaleBand()
+  .domain(labels)
+  .range([0, innerW])
+  .paddingInner(0.2)   // space between bars
+  .paddingOuter(0.15); // space on chart edges
+
+// y: IMPORTANT — domain goes 10 above max
 var yScale = d3.scaleLinear()
-  .domain([0, maxValue])
-  .range([0, innerH]);
+  .domain([0, maxValue + 10])
+  .range([innerH, 0]);  // standard y (top=0)
 
-// Chart 1 color (by value)
-var colorScaleByValue = d3.scaleSequential(d3.interpolateOranges)
-  .domain([0, maxValue]);
+// color scales
+var colorScaleByValue = d3.scaleSequential(
+  t => d3.interpolateOranges(0.35 + t * 0.65)
+).domain([0, maxValue]);
 
-// Chart 3 color (by position: left->right)
-var colorScaleByIndex = d3.scaleSequential(d3.interpolateOranges)
-  .domain([0, dataset.length - 1]);
+var colorScaleByIndex = d3.scaleSequential(
+  t => d3.interpolateOranges(0.45 + t * 0.55)
+).domain([0, dataset.length - 1]);
 
-// -------------------- HELPERS --------------------
+// -------------------- SYMBOL HELPERS --------------------
 function barCenterX(i) {
-  return i * slot + gap / 2 + barW / 2;
+  return xScale(labels[i]) + xScale.bandwidth() / 2;
 }
 function barTopY(i) {
-  return innerH - yScale(dataset[i]);
+  return yScale(values[i]);
 }
 function symbolInsideY(i) {
-  return barTopY(i) + 16; // inside bar near the top
+  // inside the top of the bar; clamp so it stays inside very short bars
+  var inside = barTopY(i) + 16;
+  var bottom = yScale(0) - 4;
+  return Math.min(inside, bottom);
 }
 
 // -------------------- DRAW FUNCTION --------------------
@@ -68,69 +73,59 @@ function drawChart(opts) {
   var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // bars
+  // -------------------- AXES (with padding + x labels) --------------------
+  var xAxis = d3.axisBottom(xScale).tickSize(0); // keep labels only
+  var yAxis = d3.axisLeft(yScale)
+                .tickValues([maxValue + 10]); // only show the top value
+
+  g.append("g")
+    .attr("transform", "translate(0," + innerH + ")")
+    .call(xAxis)
+    .call(g => g.select(".domain").attr("stroke", "black"))
+    .call(g => g.selectAll("text").attr("dy", "1.2em"));
+
+  g.append("g")
+    .call(yAxis)
+    .call(g => g.select(".domain").attr("stroke", "black"));
+
+  // -------------------- BARS --------------------
   g.selectAll("rect")
     .data(dataset)
     .enter()
     .append("rect")
-    .attr("x", function(d, i) { return i * slot + gap / 2; })
-    .attr("y", function(d) { return innerH - yScale(d); })
-    .attr("width", barW)
-    .attr("height", function(d) { return yScale(d); })
+    .attr("x", function(d) { return xScale(d[0]); })
+    .attr("y", function(d) { return yScale(d[1]); })
+    .attr("width", xScale.bandwidth())
+    .attr("height", function(d) { return innerH - yScale(d[1]); })
     .attr("fill", function(d, i) {
-      if (opts.colorMode === "value") return colorScaleByValue(d);     // chart 1
-      if (opts.colorMode === "index") return colorScaleByIndex(i);     // chart 3 (left->right)
-      return "white";                                                  // chart 2
+      if (opts.colorMode === "value") return colorScaleByValue(d[1]); // by numeric value
+      if (opts.colorMode === "index") return colorScaleByIndex(i);    // left->right
+      return "white";                                                 // no color
     })
     .attr("stroke", "black")
     .attr("stroke-width", strokeW)
     .attr("shape-rendering", "crispEdges");
 
-  // symbols (same positions on all charts)
-  g.append("text")
-    .text("★")
-    .attr("x", barCenterX(maxIndex))
-    .attr("y", symbolInsideY(maxIndex))
-    .attr("text-anchor", "middle")
-    .attr("font-size", "18px")
-    .attr("fill", opts.symbolFill || "white")
-    .attr("stroke", "black")       // outline color
-    .attr("stroke-width", 1.5)     // outline thickness
-    .attr("paint-order", "stroke"); // draw stroke behind fill
-
-  g.append("text")
-    .text("●")
-    .attr("x", barCenterX(randomIndex))
-    .attr("y", symbolInsideY(randomIndex))
-    .attr("text-anchor", "middle")
-    .attr("font-size", "18px")
-    .attr("fill", opts.symbolFill || "white")
-    .attr("stroke", "black")       // outline color
-    .attr("stroke-width", 1.5)     // outline thickness
-    .attr("paint-order", "stroke"); // draw stroke behind fill
-
-  // axis lines only (optional)
-  if (opts.axes) {
-    g.append("line") // y-axis
-      .attr("x1", 0).attr("y1", 0)
-      .attr("x2", 0).attr("y2", innerH)
+  // -------------------- SYMBOLS (★ max, ● min) --------------------
+  function addOutlinedSymbol(char, idx, fill) {
+    g.append("text")
+      .text(char)
+      .attr("x", barCenterX(idx))
+      .attr("y", symbolInsideY(idx))
+      .attr("text-anchor", "middle")
+      .attr("font-size", "18px")
+      .attr("fill", fill)
       .attr("stroke", "black")
-      .attr("stroke-width", 2);
-
-    g.append("line") // x-axis
-      .attr("x1", 0).attr("y1", innerH)
-      .attr("x2", innerW).attr("y2", innerH)
-      .attr("stroke", "black")
-      .attr("stroke-width", 2);
+      .attr("stroke-width", 1.5)
+      .attr("stroke-linejoin", "round")
+      .attr("paint-order", "stroke");
   }
+
+  addOutlinedSymbol("★", maxIndex, opts.symbolFill || "white");
+  addOutlinedSymbol("●", minIndex, opts.symbolFill || "white");
 }
 
 // -------------------- DRAW 3 CHARTS --------------------
-// 1) Gradient by VALUE
-drawChart({ colorMode: "value", axes: false,  symbolFill: "white" });
-
-// 2) No color
-drawChart({ colorMode: "none",  axes: false, symbolFill: "black" });
-
-// 3) Gradient LEFT->RIGHT (by index)
-drawChart({ colorMode: "index", axes: false, symbolFill: "white" });
+drawChart({ colorMode: "value", symbolFill: "white" }); // gradient by value
+drawChart({ colorMode: "none",  symbolFill: "black" }); // no color
+drawChart({ colorMode: "index", symbolFill: "white" }); // gradient left->right
