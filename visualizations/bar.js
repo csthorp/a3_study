@@ -1,14 +1,16 @@
-// -------------------- DATA (unique heights) --------------------
+/* -------------------- DATA (unique heights) --------------------
 var dataset = [];
 var used = new Set();
 
-while (dataset.length < 7) {
-  var v = Math.floor(Math.random() * 18) + 1; // 1..18
+while (dataset.length < 6) {
+  var v = Math.floor(Math.random() * 10) + 1; // 1..18
   if (!used.has(v)) {
     used.add(v);
     dataset.push(v);
   }
-}
+}*/
+
+var dataset=[5, 8, 10, 7, 2, 4];
 
 // -------------------- DIMENSIONS --------------------
 var w = 500, h = 300;
@@ -24,7 +26,11 @@ var barW = slot - gap;
 // -------------------- INDICES FOR SYMBOLS --------------------
 var maxValue = d3.max(dataset);
 var maxIndex = dataset.indexOf(maxValue);
-var randomIndex = Math.floor(Math.random() * dataset.length);
+
+var randomIndex;
+do {
+  randomIndex = Math.floor(Math.random() * dataset.length);
+} while (randomIndex === maxIndex);
 
 // -------------------- SCALES --------------------
 var yScale = d3.scaleLinear()
@@ -87,7 +93,10 @@ function drawChart(opts) {
     .attr("y", symbolInsideY(maxIndex))
     .attr("text-anchor", "middle")
     .attr("font-size", "18px")
-    .attr("fill", opts.symbolFill || "white");
+    .attr("fill", opts.symbolFill || "white")
+    .attr("stroke", "black")       // outline color
+    .attr("stroke-width", 1.5)     // outline thickness
+    .attr("paint-order", "stroke"); // draw stroke behind fill
 
   g.append("text")
     .text("●")
@@ -95,7 +104,10 @@ function drawChart(opts) {
     .attr("y", symbolInsideY(randomIndex))
     .attr("text-anchor", "middle")
     .attr("font-size", "18px")
-    .attr("fill", opts.symbolFill || "white");
+    .attr("fill", opts.symbolFill || "white")
+    .attr("stroke", "black")       // outline color
+    .attr("stroke-width", 1.5)     // outline thickness
+    .attr("paint-order", "stroke"); // draw stroke behind fill
 
   // axis lines only (optional)
   if (opts.axes) {
@@ -114,11 +126,11 @@ function drawChart(opts) {
 }
 
 // -------------------- DRAW 3 CHARTS --------------------
-// 1) Gradient by VALUE + axes
+// 1) Gradient by VALUE
 drawChart({ colorMode: "value", axes: false,  symbolFill: "white" });
 
-// 2) No color + no axes
+// 2) No color
 drawChart({ colorMode: "none",  axes: false, symbolFill: "black" });
 
-// 3) Gradient LEFT->RIGHT (by index) + (choose axes true/false)
+// 3) Gradient LEFT->RIGHT (by index)
 drawChart({ colorMode: "index", axes: false, symbolFill: "white" });
