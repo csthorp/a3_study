@@ -45,7 +45,7 @@
         "bar-1": {
             "type": "image",
             "path": "a3-study/assets/bar_gradientbysize.png",
-            "instruction": "Enter percentage (0-100) of the starred chart element that the circled element makes up.",
+            "instruction": "Estimate the percentage (0-100) the dotted bar is of the starred bar in the chart.",
             "style": {
                 "width": "800px"
             },
@@ -64,7 +64,7 @@
         "bar-2": {
             "type": "image",
             "path": "a3-study/assets/bar_gradientbylocation.png",
-            "instruction": "Enter percentage (0-100) of the starred chart element that the circled element makes up.",
+            "instruction": "Estimate the percentage (0-100) the dotted bar is of the starred bar in the chart.",
             "style": {
                 "width": "800px"
             },
