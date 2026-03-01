@@ -1,76 +1,111 @@
 {
     "$schema": "https://raw.githubusercontent.com/revisit-studies/study/main/src/parser/StudyConfigSchema.json",
     "studyMetadata": {
-        "title": "Basic Questionnaire Study",
+        "title": "A3 Chart Visualization Study",
         "version": "pilot",
         "authors": [
-            "The reVISit Team"
+            "CS573 Team Plot Twist"
         ],
-        "date": "2024-03-19",
-        "description": "A simple questionnaire study",
+        "date": "2026-03-05",
+        "description": "A simple data visualization study",
         "organizations": [
-            "University of Utah",
             "WPI"
         ]
     },
     "uiConfig": {
         "contactEmail": "contact@revisit.dev",
-        "helpTextPath": "a-study/assets/help.md",
+        "helpTextPath": "a3-study/assets/help.md",
         "logoPath": "revisitAssets/revisitLogoSquare.svg",
         "withProgressBar": true,
         "autoDownloadStudy": false,
         "withSidebar": true
     },
+    "baseComponents": {
+        "bar-chart": {
+            "type": "website",
+            "response": [
+                {
+                    "id": "barChart",
+                    "prompt": "Your selected answer:",
+                    "required": true,
+                    "location": "sidebar",
+                    "type": "reactive"
+                }
+            ],
+            "path": "a3-study/assets/bar-chart.html",
+            "instructionLocation": "sidebar"
+        }
+    },  
     "components": {
         "introduction": {
             "type": "markdown",
             "path": "a3-study/assets/introduction.md",
             "response": []
         },
-        "first-question-set": {
-            "type": "questionnaire",
+        "bar-1": {
+            "type": "image",
+            "path": "a3-study/assets/bar_gradientbysize.png",
+            "instruction": "Enter percentage (0-100) of the starred chart element that the circled element makes up.",
+            "style": {
+                "width": "800px"
+            },
+            "nextButtonLocation": "sidebar",
             "response": [
                 {
-                    "id": "q1-name",
-                    "prompt": "What is your first name?",
-                    "required": true,
-                    "location": "aboveStimulus",
-                    "type": "longText",
-                    "placeholder": "Please enter your first name"
-                },
-                {
-                    "id": "q2-color",
-                    "prompt": "What is your favorite color?",
-                    "required": true,
-                    "location": "aboveStimulus",
-                    "type": "dropdown",
-                    "placeholder": "Please choose your favorite color",
-                    "options": ["Red", "Blue", "My favorite color is not shown here."]
+                    "id": "a3-study/assets-response",
+                    "prompt": "Answer",
+                    "location": "sidebar",
+                    "type": "numerical",
+                    "max": 100,
+                    "min": 0
                 }
             ]
         },
-        "second-question-set": {
-            "type": "questionnaire",
+        "bar-2": {
+            "type": "image",
+            "path": "a3-study/assets/bar_gradientbylocation.png",
+            "instruction": "Enter percentage (0-100) of the starred chart element that the circled element makes up.",
+            "style": {
+                "width": "800px"
+            },
+            "nextButtonLocation": "sidebar",
             "response": [
                 {
-                    "id": "q3-satisfaction",
-                    "prompt": "Rate your satisfaction with this survey from 1 (not enjoyable) to 5 (very enjoyable).",
-                    "required": true,
-                    "location": "aboveStimulus",
-                    "type": "likert",
-                    "leftLabel": "Not Enjoyable",
-                    "rightLabel": "Very Enjoyable",
-                    "numItems": 5
+                    "id": "a3-study/assets-response",
+                    "prompt": "Answer",
+                    "location": "sidebar",
+                    "type": "numerical",
+                    "max": 100,
+                    "min": 0
                 }
             ]
-        }
-    },
+
+        },
+        "bar-chart-1": {
+            "baseComponent": "bar-chart",
+            "description": "A trial for the user to click the largest bar",
+            "instruction": "Click on the largest bar",
+            "parameters": {
+            "barData": [0.32, 0.01, 1.2, 1.3, 0.82, 0.4, 0.3]
+            }
+        },
+        "bar-chart-2":{
+            "baseComponent": "bar-chart",
+            "description": "A trial for the user to click the smallest bar",
+            "instruction": "Click on the smallest bar",
+            "parameters": {
+            "barData": [1.2, 1.2, 1.2, 1.3, 0.82, 0.4, 0.3]
+            }
+        }  
+    }, 
     "sequence": {
         "order": "fixed",
         "components": [
             "introduction",
-            "first-question-set",
-            "second-question-set"
+            "bar-1",
+            "bar-2",
+            "bar-chart-1",
+            "bar-chart-2"
         ]
     }
 }
