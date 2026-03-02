@@ -1,7 +1,7 @@
 // Data is now [label, value]
-// var dataset = [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]];
-// var dataset = [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]];
-var dataset = [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]];
+// var dataset = [["A", 10], ["B", 20], ["C", 22], ["D", 18], ["E", 16], ["F", 25], ["G", 15]]; // 40%
+// var dataset = [["A", 12], ["B", 22], ["C", 16], ["D", 5], ["E", 25], ["F", 24], ["G", 15]]; // 20%
+var dataset = [["A", 16], ["B", 15], ["C", 18], ["D", 23], ["E", 25], ["F", 22], ["G", 19]]; // 60%
 
 
 // -------------------- DIMENSIONS --------------------
@@ -40,7 +40,7 @@ var yScale = d3.scaleLinear()
 
 // color scales
 var colorScaleByValue = d3.scaleSequential(
-  t => d3.interpolateOranges(0.35 + t * 0.65)
+  t => d3.interpolateOranges(0.15 + t * 0.65)
 ).domain([0, maxValue]);
 
 var colorScaleByIndex = d3.scaleSequential(
