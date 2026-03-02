@@ -79,45 +79,6 @@
             "path": "a3-study/assets/introduction.md",
             "response": []
         },
-        "bar-1": {
-            "type": "image",
-            "path": "a3-study/assets/bar_gradientbysize.png",
-            "instruction": "Estimate the percentage (0-100) the dotted bar is of the starred bar in the chart.",
-            "style": {
-                "width": "800px"
-            },
-            "nextButtonLocation": "sidebar",
-            "response": [
-                {
-                    "id": "a3-study/assets-response",
-                    "prompt": "Answer",
-                    "location": "sidebar",
-                    "type": "numerical",
-                    "max": 100,
-                    "min": 0
-                }
-            ]
-        },
-        "bar-2": {
-            "type": "image",
-            "path": "a3-study/assets/bar_gradientbylocation.png",
-            "instruction": "Estimate the percentage (0-100) the dotted bar is of the starred bar in the chart.",
-            "style": {
-                "width": "800px"
-            },
-            "nextButtonLocation": "sidebar",
-            "response": [
-                {
-                    "id": "a3-study/assets-response",
-                    "prompt": "Answer",
-                    "location": "sidebar",
-                    "type": "numerical",
-                    "max": 100,
-                    "min": 0
-                }
-            ]
-
-        },
         "bar-chart-1": {
             "baseComponent": "bar-chart",
             "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
@@ -214,15 +175,20 @@
         "order": "fixed",
         "components": [
             "introduction",
-            "bar-chart-1",
-            "bar-chart-2",
-            "bar-chart-3",
-            "bar-chart-4",
-            "bar-chart-5",
-            "bar-chart-6",
-            "bar-chart-7",
-            "bar-chart-8",
-            "bar-chart-9"
+            {
+                "order": "random",
+                "components": [
+                    "bar-chart-1",
+                    "bar-chart-2",
+                    "bar-chart-3",
+                    "bar-chart-4",
+                    "bar-chart-5",
+                    "bar-chart-6",
+                    "bar-chart-7",
+                    "bar-chart-8",
+                    "bar-chart-9"
+                ]
+            }
         ]
     }
 }
