@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head> <!--Setup (Not Visible) Here-->
+        <meta charset="UTF-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <!-- Load revisit-communicate to be able to send data to reVISit -->
+        <script src="../../revisitUtilities/revisit-communicate.js"></script>
+        <title>CS 573 Assignment 3</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+
+    <body>
+      <!--Webpage Content Here-->
+      <script>
+        // Get data from the config file
+        Revisit.onDataReceive((data) => {
+          var dataset = data['barData']
+          const taskID = 'barChart';
+          const loc = 'belowStimulus';
+
+          // Get colorMode and symbolFill from the config file
+          var colorMode = data['colorMode']
+          var symbolFill = data['symbolFill']
+          
+          // -------------------- DIMENSIONS --------------------
+          var w = 600, h = 400;
+          var margin = { top: 20, right: 20, bottom: 45, left: 55 }; // more room for axes/labels
+          var innerW = w - margin.left - margin.right;
+          var innerH = h - margin.top - margin.bottom;
+      
+          // bar spacing
+          var strokeW = 1;
+          var gap = 10; // bigger gap so bars are clearly spaced
+
+          // -------------------- HELPERS: pull labels/values --------------------
+          var labels = dataset.map(d => d[0]);
+          var values = dataset.map(d => d[1]);
+        
+          // max/min indices (by VALUE)
+          var maxValue = d3.max(values);
+          var maxIndex = values.indexOf(maxValue);
+
+          var minValue = d3.min(values);
+          var minIndex = values.indexOf(minValue);
+
+          // -------------------- SCALES --------------------
+          // x: band scale for spacing + A/B/C labels
+          var xScale = d3.scaleBand()
+            .domain(labels)
+            .range([0, innerW])
+            .paddingInner(0.2)   // space between bars
+            .paddingOuter(0.15); // space on chart edges
+
+          // y: IMPORTANT — domain goes 10 above max
+          var yScale = d3.scaleLinear()
+            .domain([0, maxValue + 10])
+            .range([innerH, 0]);  // standard y (top=0)
+
+          // color scales
+          var colorScaleByValue = d3.scaleSequential(
+            t => d3.interpolateOranges(0.35 + t * 0.65)
+          ).domain([0, maxValue]);
+
+          var colorScaleByIndex = d3.scaleSequential(
+            t => d3.interpolateOranges(0.45 + t * 0.55)
+          ).domain([0, dataset.length - 1]);
+        
+          
+          // -------------------- SYMBOL HELPERS --------------------
+          function barCenterX(i) {
+            return xScale(labels[i]) + xScale.bandwidth() / 2;
+          }
+          function barTopY(i) {
+            return yScale(values[i]);
+          }
+          function symbolInsideY(i) {
+            // inside the top of the bar; clamp so it stays inside very short bars
+            var inside = barTopY(i) + 16;
+            var bottom = yScale(0) - 4;
+            return Math.min(inside, bottom);
+          }
+
+          // -------------------- DRAW FUNCTION --------------------
+          // Change function signature to take args rather than list of args
+          function drawChart(colormode, symbolfill) {
+            var svg = d3.select("body")
+              .append("svg")
+              .attr("width", w)
+              .attr("height", h)
+              .style("display", "block")
+              .style("margin-bottom", "18px");
+
+            var g = svg.append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            // -------------------- AXES (with padding + x labels) --------------------
+            var xAxis = d3.axisBottom(xScale).tickSize(0); // keep labels only
+            var yAxis = d3.axisLeft(yScale)
+                          .tickValues([maxValue + 10]); // only show the top value
+
+            g.append("g")
+              .attr("transform", "translate(0," + innerH + ")")
+              .call(xAxis)
+              .call(g => g.select(".domain").attr("stroke", "black"))
+              .call(g => g.selectAll("text").attr("dy", "1.2em"));
+
+            g.append("g")
+              .call(yAxis)
+              .call(g => g.select(".domain").attr("stroke", "black"));
+
+            // -------------------- BARS --------------------
+            g.selectAll("rect")
+              .data(dataset)
+              .enter()
+              .append("rect")
+              .attr("x", function(d) { return xScale(d[0]); })
+              .attr("y", function(d) { return yScale(d[1]); })
+              .attr("width", xScale.bandwidth())
+              .attr("height", function(d) { return innerH - yScale(d[1]); })
+              .attr("fill", function(d, i) {
+                if (colormode === "value") return colorScaleByValue(d[1]); // by numeric value
+                if (colormode === "index") return colorScaleByIndex(i);    // left->right
+                return "white";                                                 // no color
+              })
+              .attr("stroke", "black")
+              .attr("stroke-width", strokeW)
+              .attr("shape-rendering", "crispEdges");
+
+            // -------------------- SYMBOLS (★ max, ● min) --------------------
+            function addOutlinedSymbol(char, idx, fill) {
+              g.append("text")
+                .text(char)
+                .attr("x", barCenterX(idx))
+                .attr("y", symbolInsideY(idx))
+                .attr("text-anchor", "middle")
+                .attr("font-size", "18px")
+                .attr("fill", fill)
+                .attr("stroke", "black")
+                .attr("stroke-width", 1.5)
+                .attr("stroke-linejoin", "round")
+                .attr("paint-order", "stroke");
+            }
+
+            addOutlinedSymbol("★", maxIndex, symbolfill || "white");
+            addOutlinedSymbol("●", minIndex, symbolfill || "white");
+          }
+
+        // -------------------- DRAW CHART --------------------
+        drawChart(colorMode, symbolFill);
+        });
+      </script>
+    </body>
+</html>

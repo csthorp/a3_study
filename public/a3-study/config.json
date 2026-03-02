@@ -23,16 +23,53 @@
     "baseComponents": {
         "bar-chart": {
             "type": "website",
+            "nextButtonLocation": "sidebar",
             "response": [
                 {
                     "id": "barChart",
-                    "prompt": "Your selected answer:",
+                    "prompt": "Enter the percentage (0-100) below:",
                     "required": true,
                     "location": "sidebar",
-                    "type": "reactive"
+                    "type": "numerical",
+                    "max": 100,
+                    "min": 0
                 }
             ],
-            "path": "a3-study/assets/bar-chart.html",
+            "path": "a3-study/assets/bar-charts.html",
+            "instructionLocation": "sidebar"
+        },
+        "pie-chart": {
+            "type": "website",
+            "nextButtonLocation": "sidebar",
+            "response": [
+                {
+                    "id": "pieChart",
+                    "prompt": "Estimate the percentage (0-100) the dotted bar is of the starred bar:",
+                    "required": true,
+                    "location": "sidebar",
+                    "type": "numerical",
+                    "max": 100,
+                    "min": 0
+                }
+            ],
+            "path": "a3-study/assets/pie-chart.html",
+            "instructionLocation": "sidebar"
+        },
+        "mosaic-chart": {
+            "type": "website",
+            "nextButtonLocation": "sidebar",
+            "response": [
+                {
+                    "id": "mosaicChart",
+                    "prompt": "Estimate the percentage (0-100) the dotted bar is of the starred bar:",
+                    "required": true,
+                    "location": "sidebar",
+                    "type": "numerical",
+                    "max": 100,
+                    "min": 0
+                }
+            ],
+            "path": "a3-study/assets/mosaicChart-chart.html",
             "instructionLocation": "sidebar"
         }
     },  
@@ -83,29 +120,109 @@
         },
         "bar-chart-1": {
             "baseComponent": "bar-chart",
-            "description": "A trial for the user to click the largest bar",
-            "instruction": "Click on the largest bar",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
             "parameters": {
-            "barData": [0.32, 0.01, 1.2, 1.3, 0.82, 0.4, 0.3]
+            "colorMode": "value",
+            "symbolFill": "white",
+            "barData": [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]]
             }
         },
         "bar-chart-2":{
             "baseComponent": "bar-chart",
-            "description": "A trial for the user to click the smallest bar",
-            "instruction": "Click on the smallest bar",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
             "parameters": {
-            "barData": [1.2, 1.2, 1.2, 1.3, 0.82, 0.4, 0.3]
+            "colorMode": "none",
+            "symbolFill": "black",
+            "barData": [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]]
             }
-        }  
+        },  
+        "bar-chart-3": {
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "index",
+            "symbolFill": "white",
+            "barData": [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]]
+            }
+        },
+        "bar-chart-4": {
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "value",
+            "symbolFill": "white",
+            "barData": [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]]
+            }
+        },
+        "bar-chart-5":{
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "none",
+            "symbolFill": "black",
+            "barData": [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]]
+            }
+        },  
+        "bar-chart-6": {
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "index",
+            "symbolFill": "white",
+            "barData": [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]]
+            }
+        },
+        "bar-chart-7": {
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "value",
+            "symbolFill": "white",
+            "barData": [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]]
+            }
+        },
+        "bar-chart-8":{
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "none",
+            "symbolFill": "black",
+            "barData": [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]]
+            }
+        },  
+        "bar-chart-9": {
+            "baseComponent": "bar-chart",
+            "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
+            "instructionLocation": "aboveStimulus",
+            "parameters": {
+            "colorMode": "index",
+            "symbolFill": "white",
+            "barData": [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]]
+            }
+        },
+
     }, 
     "sequence": {
         "order": "fixed",
         "components": [
             "introduction",
-            "bar-1",
-            "bar-2",
             "bar-chart-1",
-            "bar-chart-2"
+            "bar-chart-2",
+            "bar-chart-3",
+            "bar-chart-4",
+            "bar-chart-5",
+            "bar-chart-6",
+            "bar-chart-7",
+            "bar-chart-8",
+            "bar-chart-9"
         ]
     }
 }
