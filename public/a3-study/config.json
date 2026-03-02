@@ -125,7 +125,7 @@
             "parameters": {
             "colorMode": "value",
             "symbolFill": "white",
-            "barData": [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]]
+            "barData": [["A", 10], ["B", 20], ["C", 22], ["D", 18], ["E", 16], ["F", 25], ["G", 15]]
             }
         },
         "bar-chart-2":{
@@ -135,7 +135,7 @@
             "parameters": {
             "colorMode": "none",
             "symbolFill": "black",
-            "barData": [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]]
+            "barData": [["A", 10], ["B", 20], ["C", 22], ["D", 18], ["E", 16], ["F", 25], ["G", 15]]
             }
         },  
         "bar-chart-3": {
@@ -145,7 +145,7 @@
             "parameters": {
             "colorMode": "index",
             "symbolFill": "white",
-            "barData": [["A", 15], ["B", 10], ["C", 20], ["D", 16], ["E", 25], ["F", 22], ["G", 18]]
+            "barData": [["A", 10], ["B", 20], ["C", 22], ["D", 18], ["E", 16], ["F", 25], ["G", 15]]
             }
         },
         "bar-chart-4": {
@@ -155,7 +155,7 @@
             "parameters": {
             "colorMode": "value",
             "symbolFill": "white",
-            "barData": [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]]
+            "barData": [["A", 12], ["B", 22], ["C", 16], ["D", 5], ["E", 25], ["F", 24], ["G", 15]]
             }
         },
         "bar-chart-5":{
@@ -165,7 +165,7 @@
             "parameters": {
             "colorMode": "none",
             "symbolFill": "black",
-            "barData": [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]]
+            "barData": [["A", 12], ["B", 22], ["C", 16], ["D", 5], ["E", 25], ["F", 24], ["G", 15]]
             }
         },  
         "bar-chart-6": {
@@ -175,7 +175,7 @@
             "parameters": {
             "colorMode": "index",
             "symbolFill": "white",
-            "barData": [["A", 7], ["B", 22], ["C", 17], ["D", 25], ["E", 5], ["F", 10], ["G", 18]]
+            "barData": [["A", 12], ["B", 22], ["C", 16], ["D", 5], ["E", 25], ["F", 24], ["G", 15]]
             }
         },
         "bar-chart-7": {
@@ -185,7 +185,7 @@
             "parameters": {
             "colorMode": "value",
             "symbolFill": "white",
-            "barData": [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]]
+            "barData": [["A", 16], ["B", 15], ["C", 18], ["D", 23], ["E", 25], ["F", 22], ["G", 19]]
             }
         },
         "bar-chart-8":{
@@ -195,7 +195,7 @@
             "parameters": {
             "colorMode": "none",
             "symbolFill": "black",
-            "barData": [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]]
+            "barData": [["A", 16], ["B", 15], ["C", 18], ["D", 23], ["E", 25], ["F", 22], ["G", 19]]
             }
         },  
         "bar-chart-9": {
@@ -205,7 +205,7 @@
             "parameters": {
             "colorMode": "index",
             "symbolFill": "white",
-            "barData": [["A", 15], ["B", 12], ["C", 20], ["D", 7], ["E", 16], ["F", 25], ["G", 9]]
+            "barData": [["A", 16], ["B", 15], ["C", 18], ["D", 23], ["E", 25], ["F", 22], ["G", 19]]
             }
         },
 
