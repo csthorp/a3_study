@@ -35,7 +35,7 @@
                     "min": 0
                 }
             ],
-            "path": "a3-study/assets/bar-charts.html",
+            "path": "a3-study/assets/bar-chart.html",
             "instruction": "Look at the chart below. Estimate the percentage the dotted bar is of the starred bar.",
             "instructionLocation": "aboveStimulus"
         },
