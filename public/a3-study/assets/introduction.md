@@ -10,7 +10,7 @@ For each chart, you will be asked to estimate the percentage of the portion of t
 No personally identifying information is collected as part of this study. We will be aggregating the response data to create visualizations for a class assignment.
 <br><br>
 Thank you for taking the time to participate in our survey!
-<br><br>  
+<br><br>
 Sincerely,<br>
 Team Plot Twist<br>
 CS573 Data Visualization<br>
