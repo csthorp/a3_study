@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head> <!--Setup (Not Visible) Here-->
+      <meta charset="UTF-8" />
+      <script src="https://d3js.org/d3.v7.min.js"></script>
+      <!-- Load revisit-communicate to be able to send data to reVISit -->
+      <script src="../../revisitUtilities/revisit-communicate.js"></script>
+      <title>CS 573 Assignment 3</title>
+      <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <!--Webpage Content Here-->
+    <script>
+      // Get data from the config file
+      Revisit.onDataReceive((data) => {
+        var dataset = data['pieData']
+        const taskID = 'pieChart';
+        const loc = 'belowStimulus';
+
+        // Get colorMode, symbolFill, and labelFill from the config file
+        var colorMode = data['colorMode']
+        var symbolFill = data['symbolFill']
+        var labelFill = data['labelFill']
+
+        // -------------------- HELPERS: pull labels/values --------------------
+        var labels = dataset.map(d => d[0]);
+        var values = dataset.map(d => d[1]);
+
+        // max/min indices (by VALUE)
+        var maxValue = d3.max(values);
+        var maxIndex = values.indexOf(maxValue);
+
+        var minValue = d3.min(values);
+        var minIndex = values.indexOf(minValue);
+
+        // -------------------- DIMENSIONS --------------------
+        var w = 600, h = 400;
+        var margin = { top: 20, right: 20, bottom: 20, left: 20 };
+        var innerW = w - margin.left - margin.right;
+        var innerH = h - margin.top - margin.bottom;
+        var radius = Math.min(innerW, innerH) / 2;
+
+        var strokeW = 1;
+
+        // color scales
+        var colorScaleByValue = d3.scaleSequential(
+          t => d3.interpolateOranges(0.15 + t * 0.65)
+        ).domain([0, maxValue]);
+
+        var colorScaleByIndex = d3.scaleSequential(
+          t => d3.interpolateOranges(0.45 + t * 0.55)
+        ).domain([0, dataset.length - 1]);
+
+        var pie = d3.pie()
+          .sort(null) // keep input order
+          .value(d => d[1]);
+
+        var arc = d3.arc()
+          .innerRadius(0)
+          .outerRadius(radius);
+
+        var labelArc = d3.arc()
+          .innerRadius(radius * 1.08)
+          .outerRadius(radius * 1.08);
+
+        // -------------------- DRAW FUNCTION --------------------
+        function drawPie(colormode, symbolfill, labelfill) {
+          var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h)
+            .style("display", "block")
+            .style("margin-bottom", "18px");
+
+          var g = svg.append("g")
+            .attr("transform",
+                  "translate(" + (margin.left + innerW / 2) + "," + (margin.top + innerH / 2) + ")"
+             );
+
+          var pieData = pie(dataset);
+
+          // slices
+          g.selectAll("path")
+            .data(pieData)
+            .enter()
+            .append("path")
+            .attr("d", arc)
+            .attr("fill", function(d, i) {
+              if (colormode === "value") return colorScaleByValue(d.data[1]);
+              if (colormode === "index") return colorScaleByIndex(i);
+              return "white";
+              })
+            .attr("stroke", "black")
+            .attr("stroke-width", strokeW);
+
+          // letter labels (A, B, C...) outside slices
+          g.selectAll(".slice-label")
+            .data(pieData)
+            .enter()
+            .append("text")
+            .attr("class", "slice-label")
+            .text(d => d.data[0])
+            .attr("x", d => labelArc.centroid(d)[0])
+            .attr("y", d => labelArc.centroid(d)[1] + 4)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "14px")
+            .attr("fill", "black")
+            .attr("stroke", "white")
+            .attr("stroke-width", 3)
+            .attr("paint-order", "stroke");
+
+          // symbol with outline
+          function placeSymbol(sliceIndex, char, fillColor) {
+            var c = arc.centroid(pieData[sliceIndex]);
+            g.append("text")
+              .text(char)
+              .attr("x", c[0])
+              .attr("y", c[1] + 6)
+              .attr("text-anchor", "middle")
+              .attr("font-size", "18px")
+              .attr("fill", fillColor)
+              .attr("stroke", "black")
+              .attr("stroke-width", 1.5)
+              .attr("stroke-linejoin", "round")
+              .attr("paint-order", "stroke");
+          }
+
+          // ★ on max slice, ● on min slice (guaranteed different since values are unique)
+          placeSymbol(maxIndex, "★", symbolfill || "white");
+          placeSymbol(minIndex, "●", symbolfill || "white");
+        }
+
+        // -------------------- DRAW CHART --------------------
+        drawPie(colorMode, symbolFill, labelFill);
+      });
+    </script>  
+  </body>
+</html>
