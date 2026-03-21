@@ -1,9 +1,9 @@
-// Data is now [label, value]
+// ------------------ BAR CHARTS --------------------------
+
+// -------------------- DATA --------------------
 // var dataset = [["A", 10], ["B", 20], ["C", 22], ["D", 18], ["E", 16], ["F", 25], ["G", 15]]; // 40%
 // var dataset = [["A", 12], ["B", 22], ["C", 16], ["D", 5], ["E", 25], ["F", 24], ["G", 15]]; // 20%
 var dataset = [["A", 16], ["B", 15], ["C", 18], ["D", 23], ["E", 25], ["F", 22], ["G", 19]]; // 60%
-
-
 // -------------------- DIMENSIONS --------------------
 var w = 600, h = 400;
 var margin = { top: 20, right: 20, bottom: 45, left: 55 }; // more room for axes/labels
@@ -40,7 +40,7 @@ var yScale = d3.scaleLinear()
 
 // color scales
 var colorScaleByValue = d3.scaleSequential(
-  t => d3.interpolateOranges(0.15 + t * 0.65)
+  t => d3.interpolateOranges(0.35 + t * 0.65)
 ).domain([0, maxValue]);
 
 var colorScaleByIndex = d3.scaleSequential(
